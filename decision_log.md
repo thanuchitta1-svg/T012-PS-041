@@ -1,0 +1,22 @@
+# Decision Log — T012 / PS-041
+
+- Chose Python 3 (stdlib only) — fastest to iterate, no build step, easy viva demo.
+- Single-file engine (`main.py`) with a `Garage` class — keeps state explicit and easy to explain live.
+- GST added on top of fees (18% parking-side, 5% EV energy), computed per receipt line and rounded to 2 dp; `gst_total` is the sum of line GST so receipt lines always reconcile to the summary total.
+- Slabs billed per 24-hour block from entry: full blocks at `daily_cap`, remainder via first-block + additional-hour, each capped — matches EC-04 (26 h SUV = 450 + 60).
+- Night flat evaluated only when entry time is in [20:00, 06:00) and exit is before 09:00 the next calendar day, and only if cheaper than the slab total — handles the 19:59 vs 20:00 boundary.
+- Grace = `duration <= 900 s` free; lost-ticket and pass/misuse paths call the fee calc with `ignore_grace=True`.
+- Pass coverage computed per calendar day against the 06:00–23:00 window; uncovered seconds are billed once as a slab on total uncovered hours (matches EC-06: 60 min → ₹40).
+- Pass validity checked at entry date against `valid_from`/`valid_to`; pro-ration = `ceil(fee * days_charged / 30)` with `days_charged` capped at 30 so a 1st-of-month purchase costs the full fee.
+- Misuse counted only while the pass is ACTIVE; suspension at 2 misuses in the same calendar month (month tracked per pass).
+- Allocation order: TW→TW, SUV→SUV, EV→EV_CAR→CAR, non-EV CAR→CAR→SUV→EV_CAR(+₹50); lowest free `bay_id` wins (README binding choice).
+- Reservation consulted only after the free preference chain fails and before the EV-surcharge tier; fee = ₹20 × ceil(hours); reservation marked used on admission.
+- EV energy/idle billed whenever `CHARGE_COMPLETE` exists, regardless of bay type — the command stream is the source of truth for charging sessions.
+- Idle fee starts at `max(charge_complete_ts, entry + 120 min)`; minutes rounded up, capped at ₹400.
+- Lost ticket: entry recovered via the open ticket for the plate; "recoverable from plate log" = exact `plate_read` match in `anpr_log.csv`; fee = `max(slab, flat)` when matched else flat.
+- WALLET payment is all-or-nothing; on `PAYMENT_FAILED` the ticket stays OPEN with the bay held, so a later `EXIT` re-bills with the new exit time (TKT-00169 wallet→card retry).
+- `PRINT_DAILY` aggregates only PAID exits whose exit date matches, grouped by payment mode in canonical order CASH, CARD, UPI, WALLET.
+- Rejected entries are stored with status `REJECTED_ENTRY` and printed with blank billing fields if a `PRINT_RECEIPT` references them.
+- Opening occupancy is loaded before the command stream and allocated to the lowest free bay of its stated `bay_type`.
+- Outputs written once at end of stream in the exact column order from the sample-data README; money formatted `%.2f`.
+- Known data note: in the visible sample, CAR bays are 58/60 occupied at 2026-10-30 09:40 (two night cars exit at 08:59), so the planted EC-08/reservation scenarios do not trigger on this data set; the rules are implemented generically and trigger whenever capacity is actually full (verified by unit tests on `allocate`).

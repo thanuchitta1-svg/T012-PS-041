@@ -1,0 +1,4 @@
+vehicle_type,first_block_hours,first_block_fee,additional_hour_fee,daily_cap,night_flat_fee,lost_ticket_fee,monthly_pass_fee
+CAR,2,40.00,30.00,300.00,150.00,500.00,2500.00
+SUV,2,60.00,45.00,450.00,,500.00,
+TWO_WHEELER,2,15.00,10.00,80.00,,200.00,800.00
