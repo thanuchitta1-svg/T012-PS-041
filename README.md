@@ -36,6 +36,8 @@ The application reads the following files:
 - `opening_occupancy.csv` – Initial vehicle occupancy
 - `anpr_log.csv` – Vehicle recognition records
 - `commands.txt` – Commands to process
+## test_suite.py
+## decision_log.md
 
 ## Output Files
 
