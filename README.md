@@ -57,3 +57,8 @@ daily-collection reconciliation check.
 - `PRINT_RECEIPT` and `PRINT_DAILY` produce the evaluation CSVs.
 
 See `design.md` (business-rule register BR-01 … BR-24) and `decision_log.md`.
+
+Demo Video
+Final Project Demonstration – Team T012, PS-041
+https://drive.google.com/file/d/1zXxrHdgCtnHstKtCDLqNX_0jhm7bXcCJ/view?usp=sharing
+
