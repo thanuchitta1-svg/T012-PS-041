@@ -37,7 +37,7 @@ The application reads the following files:
 - `anpr_log.csv` – Vehicle recognition records
 - `commands.txt` – Commands to process
 ## test_suite.py
-https://github.com/thanuchitta1-svg/T012-PS-041/commit/bf3e0ac48f2bcdc7be99c6a3fdfae241d6e2472c#diff-bf163663f0ea3b0a9462ca6c04db7dc629d4b8e9dee4517d99febb8e71306da1
+
 ## decision_log.md
 
 ## Output Files
