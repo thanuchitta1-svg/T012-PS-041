@@ -77,6 +77,6 @@ The test suite covers parking allocation, tariff calculations, edge cases, EV ch
 
 ## Demo Video
 Final Project Demonstration – Team T012, PS-041
-https://drive.google.com/file/d/1hXqa53MgCaI11jykRKNYesBWDxjbxFNz/view?usp=drivesdk
+https://drive.google.com/file/d/1QtRttB3a-4wV6KDIltyIY-jZqAEcR9au/view?usp=drivesdk
 
 
